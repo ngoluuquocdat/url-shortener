@@ -15,7 +15,8 @@ namespace UrlShortener.Infrastructure
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../UrlShortener.Api"))
-                .AddJsonFile("appsettings.Development.json");
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .AddEnvironmentVariables();
 
             IConfigurationRoot configuration = configBuilder.Build();
 
