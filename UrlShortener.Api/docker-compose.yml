@@ -1,46 +1,39 @@
-﻿# Default compose file. Used by `docker compose up`.
-# Optimized for development: bind mounts, hot reload, dev images.
-# Production overrides live in docker-compose.prod.yml.
+﻿# Default compose file.
 
 services:
   postgres:
     image: postgres:16-alpine
     container_name: url-shortener-postgres
+    expose:
+      - "5432"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-url_shortener}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-url_shortener_dev}
-      POSTGRES_DB: ${POSTGRES_DB:-url_shortener}
-    ports:
-      - "5464:5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-url_shortener} -d ${POSTGRES_DB:-url_shortener}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
   
   migrator:
-    build:
-      context: ../
-      dockerfile: Dockerfile
-      target: migrator
+    image: url-shortener-api:migrator
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=url_shortener;Username=url_shortener;Password=url_shortener_dev
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: ${DB_CONNECTION_STRING}
     depends_on:
       postgres:
         condition: service_healthy
   
   api:
-    build:
-      context: ../
-      dockerfile: Dockerfile
+    image: url-shortener-api:latest
     ports:
       - "8080:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=url_shortener;Username=url_shortener;Password=url_shortener_dev
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: ${DB_CONNECTION_STRING}
     depends_on:
       migrator:
         condition: service_completed_successfully
