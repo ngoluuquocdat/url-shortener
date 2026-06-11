@@ -10,7 +10,7 @@ namespace UrlShortener.Application.UseCases.ShortUrl.CreateShortUrl.DTOs
     public class CreateShortUrlRequest
     {
         [Required]
-        public string OriginalUrl { get; set; }
+        public required string OriginalUrl { get; set; }
         public string? CustomShortCode { get; set; }
         public DateTimeOffset? ExpiresAt { get; set; }
     }

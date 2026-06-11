@@ -50,7 +50,18 @@ namespace UrlShortener.Domain.Entities
                 throw new ShortUrlExpiredException();
             }
 
+            ValidateOriginalUrl(newUrl);
             OriginalUrl = newUrl;
+        }
+
+        public void UpdateExpiration(DateTimeOffset? expiresAt)
+        {
+            if (IsExpired(DateTimeOffset.UtcNow))
+            {
+                throw new ShortUrlExpiredException();
+            }
+
+            SetExpiration(expiresAt);
         }
 
         public void AssignShortCode(string shortCode)

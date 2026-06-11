@@ -59,7 +59,7 @@ namespace UrlShortener.Application.UseCases.ShortUrl.CreateShortUrl
                 var shortUrlDTO = new ShortUrlDTO
                 {
                     Id = newShortUrl.Id,
-                    ShortCode = newShortUrl.ShortCode,
+                    ShortCode = newShortUrl.ShortCode!,
                     OriginalUrl = newShortUrl.OriginalUrl,
                     CreatedAt = newShortUrl.CreatedAt,
                     ExpiresAt = newShortUrl.ExpiresAt
