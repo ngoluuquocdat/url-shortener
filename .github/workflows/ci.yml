@@ -58,3 +58,19 @@ jobs:
           push: true
           tags: |
             ghcr.io/ngoluuquocdat/url-shortener-api:migrator
+  
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_PRV_KEY }}
+          key_passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          script: |
+            cd /home/dat/app
+            docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up -d
