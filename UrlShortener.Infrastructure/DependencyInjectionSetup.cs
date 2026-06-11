@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UrlShortener.Application.Interfaces;
-using UrlShortener.Infrastructure.EventPublisher;
 using UrlShortener.Infrastructure.Repositories;
 
 namespace UrlShortener.Infrastructure
