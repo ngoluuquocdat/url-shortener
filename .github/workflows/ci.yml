@@ -67,9 +67,8 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRV_KEY }}
-          publickey: ${{ secrets.VPS_SSH_PUB_KEY }}
           passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
           script: |
             cd /home/dat/app
