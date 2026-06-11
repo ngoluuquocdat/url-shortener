@@ -3,12 +3,6 @@ services:
   postgres:
     ports: 
       - "5464:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-url_shortener}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-url_shortener_dev}
-      POSTGRES_DB: ${POSTGRES_DB:-url_shortener}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-url_shortener} -d ${POSTGRES_DB:-url_shortener}"]
   
   migrator:
     build:
@@ -17,12 +11,12 @@ services:
       target: migrator
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=url_shortener;Username=url_shortener;Password=url_shortener_dev
 
   api:
     build:
       context: ../
       dockerfile: Dockerfile
+    ports:
+     - "8080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=url_shortener;Username=url_shortener;Password=url_shortener_dev
