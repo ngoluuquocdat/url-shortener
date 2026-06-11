@@ -22,6 +22,8 @@ nuget.config
 # Environment & secrets
 .env
 .env.*
+!.env.example
+
 appsettings.Development.json
 appsettings.Local.json
 **/secrets.json

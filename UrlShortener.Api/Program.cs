@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using UrlShortener.Api.Utilities.Constraints;
 using UrlShortener.Application.Interfaces;
 using UrlShortener.Application.UseCases.ShortUrl.CreateShortUrl;
@@ -34,10 +35,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
+var fwd = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+fwd.KnownNetworks.Clear();
+fwd.KnownProxies.Clear();
+app.UseForwardedHeaders(fwd);
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();

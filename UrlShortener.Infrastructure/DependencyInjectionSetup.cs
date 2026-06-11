@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UrlShortener.Application.Interfaces;
+using UrlShortener.Infrastructure.EventPublisher;
 using UrlShortener.Infrastructure.Repositories;
 
 namespace UrlShortener.Infrastructure
@@ -23,6 +24,10 @@ namespace UrlShortener.Infrastructure
             // Repositories
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
+
+            // Healthcheck
+            services.AddHealthChecks()
+                .AddDbContextCheck<AppDbContext>();
 
             return services;
         }
