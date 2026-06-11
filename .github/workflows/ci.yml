@@ -73,4 +73,5 @@ jobs:
           script: |
             cd /home/dat/app
             docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker pull ghcr.io/ngoluuquocdat/url-shortener-api:${{ github.sha }}
             docker compose --env-file .env.prod -f docker-compose.yml -f docker-compose.prod.yml up -d
